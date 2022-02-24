@@ -120,7 +120,7 @@ void main() {
 
   test('should perform a batch delete of chat in the database', () async {
     // arrange
-    final chatId = '111';
+    const chatId = '111';
     when(mockSQFLiteDatabase.batch()).thenReturn(mockBatch);
 
     // act
