@@ -1,6 +1,6 @@
 import 'package:chat/src/services/encryption/encryption_service.dart';
 import 'package:chat/src/services/encryption/encryption_service_impl.dart';
-import 'package:rethinkdb_dart/rethinkdb_dart.dart';
+import 'package:rethink_db_ns/rethink_db_ns.dart';
 import 'dart:async';
 
 import 'package:chat/src/models/user.dart';
@@ -9,7 +9,7 @@ import 'package:chat/src/services/message/message_service.dart';
 
 class MessageService implements IMessageService {
   final Connection _connection;
-  final Rethinkdb _rethinkdb;
+  final RethinkDb _rethinkdb;
   final IEncryptionService _encryptionService;
 
   final _controller = StreamController<Message>.broadcast();

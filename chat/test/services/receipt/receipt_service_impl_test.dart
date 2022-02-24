@@ -4,12 +4,12 @@ import 'package:chat/src/models/receipt.dart';
 import 'package:chat/src/models/user.dart';
 import 'package:chat/src/services/receipt/receipt_service_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:rethinkdb_dart/rethinkdb_dart.dart';
+import 'package:rethink_db_ns/rethink_db_ns.dart';
 
 import '../../helpers.dart';
 
 void main() {
-  Rethinkdb rethinkdb = Rethinkdb();
+  RethinkDb rethinkdb = RethinkDb();
   Connection connection;
   ReceiptService receiptService;
 

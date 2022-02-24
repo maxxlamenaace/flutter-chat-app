@@ -10,8 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  rethinkdb_dart: ^2.3.2+6
-  encrypt: ^4.1.0
+    
+  # rethinkdb_dart: ^2.3.2+6
+  # Provisional librairy while rethinkdb_dart not available for null safety
+  rethink_db_ns: ^0.0.4
+  encrypt: ^5.0.1
 
 dev_dependencies:
   flutter_test:

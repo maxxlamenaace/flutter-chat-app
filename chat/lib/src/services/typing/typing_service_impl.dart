@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:chat/src/models/user.dart';
 import 'package:chat/src/models/typing_event.dart';
 import 'package:chat/src/services/typing/typing_service.dart';
-import 'package:rethinkdb_dart/rethinkdb_dart.dart';
+import 'package:rethink_db_ns/rethink_db_ns.dart';
 
 class TypingService implements ITypingService {
   final Connection _connection;
-  final Rethinkdb _rethinkdb;
+  final RethinkDb _rethinkdb;
 
   final _controller = StreamController<TypingEvent>.broadcast();
 

@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:chat/src/models/user.dart';
 import 'package:chat/src/models/receipt.dart';
 import 'package:chat/src/services/receipt/receipt_service.dart';
-import 'package:rethinkdb_dart/rethinkdb_dart.dart';
+import 'package:rethink_db_ns/rethink_db_ns.dart';
 
 class ReceiptService implements IReceiptService {
   final Connection _connection;
-  final Rethinkdb _rethinkdb;
+  final RethinkDb _rethinkdb;
 
   final _controller = StreamController<Receipt>.broadcast();
 
