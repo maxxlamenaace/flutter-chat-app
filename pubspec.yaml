@@ -31,7 +31,9 @@ dependencies:
     sdk: flutter
   chat:
     path: ./chat  
-  sqflite: ^2.0.2  
+  sqflite: ^2.0.2
+  bloc: ^8.0.2
+  equatable: ^2.0.3  
 
 
   # The following adds the Cupertino Icons font to your application.

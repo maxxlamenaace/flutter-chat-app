@@ -22,9 +22,8 @@ class TypingService implements ITypingService {
   }
 
   @override
-  Future<bool> send(
-      {required TypingEvent typingEvent, required User to}) async {
-    if (!to.isActive) {
+  Future<bool> send({required TypingEvent typingEvent, User? to}) async {
+    if (to == null || !to.isActive) {
       return false;
     } else {
       Map record = await _rethinkdb.table("typing_events").insert(
