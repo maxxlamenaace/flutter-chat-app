@@ -1,8 +1,11 @@
+import 'package:chat_app/composition_root.dart';
 import 'package:chat_app/theme.dart';
 import 'package:chat_app/ui/pages/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await CompositionRoot.configure();
   runApp(const MyApp());
 }
 
@@ -17,6 +20,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: lightTheme(context),
         darkTheme: darkTheme(context),
-        home: const Onboarding());
+        home: CompositionRoot.composeOnboardingUI());
   }
 }

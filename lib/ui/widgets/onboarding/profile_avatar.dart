@@ -1,9 +1,13 @@
 import 'package:chat_app/colors.dart';
 import 'package:chat_app/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
-class ProfileUpload extends StatelessWidget {
-  const ProfileUpload({Key? key}) : super(key: key);
+class ProfileAvatar extends StatelessWidget {
+  final VoidCallback onUpdateAvatar;
+  final String imageUrl;
+
+  const ProfileAvatar({required this.onUpdateAvatar, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -11,29 +15,26 @@ class ProfileUpload extends StatelessWidget {
         height: 126,
         width: 126,
         child: Material(
-            color:
-                isLightTheme(context) ? Color(0xFFF2F2F2) : Color(0xFFF2F2F2),
+            color: isLightTheme(context) ? Colors.white : Colors.black,
             borderRadius: BorderRadius.circular(126),
             child: InkWell(
                 borderRadius: BorderRadius.circular(126),
-                onTap: () {},
+                onTap: () => onUpdateAvatar(),
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      child: Icon(Icons.add_a_photo_outlined,
-                          size: 50,
-                          color:
-                              isLightTheme(context) ? iconLight : Colors.black),
-                    ),
+                    ClipOval(
+                        child: SvgPicture.network(
+                      imageUrl,
+                      height: 100,
+                    )),
                     Align(
                         alignment: Alignment.topRight,
                         child: CircleAvatar(
                             backgroundColor: isLightTheme(context)
                                 ? Colors.white
                                 : Colors.black,
-                            child: Icon(Icons.add_circle_rounded,
+                            child: Icon(Icons.refresh_rounded,
                                 color: appColor, size: 38)))
                   ],
                 ))));

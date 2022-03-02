@@ -1,6 +1,10 @@
+import 'package:chat_app/services/avatar_service.dart';
+import 'package:chat_app/states-management/onboarding/onboarding_cubit.dart';
+import 'package:chat_app/states-management/onboarding/onboarding_state.dart';
 import 'package:chat_app/ui/widgets/common/custom_text_field.dart';
 import 'package:chat_app/ui/widgets/onboarding/logo.dart';
-import 'package:chat_app/ui/widgets/onboarding/profile_upload.dart';
+import 'package:chat_app/ui/widgets/onboarding/profile_avatar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/colors.dart';
 
@@ -12,13 +16,34 @@ class Onboarding extends StatefulWidget {
 }
 
 class _OnboardingState extends State<Onboarding> {
-  _logo() {
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Logo(),
-        ]);
+  final AvatarService _avatarService = AvatarService();
+
+  String _username = '';
+  String _imageUrl = '';
+
+  @override
+  void initState() {
+    _imageUrl = _avatarService.getRandomAvatarUrl();
+    super.initState();
+  }
+
+  _updateAvatar() {
+    setState(() {
+      _imageUrl = _avatarService.getRandomAvatarUrl();
+    });
+  }
+
+  _connectSession() async {
+    await context.read<OnboardingCubit>().connect(_username, _imageUrl);
+  }
+
+  String _checkInputs() {
+    var error = '';
+    if (_username.isEmpty) {
+      error = 'Please enter a username';
+    }
+
+    return error;
   }
 
   @override
@@ -32,23 +57,47 @@ class _OnboardingState extends State<Onboarding> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-              _logo(),
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Logo(),
+                  ]),
               Spacer(),
-              ProfileUpload(),
+              ProfileAvatar(onUpdateAvatar: _updateAvatar, imageUrl: _imageUrl),
               Spacer(flex: 1),
               Padding(
                   padding: EdgeInsets.only(left: 25, right: 25),
                   child: CustomTextField(
-                    hint: 'What is your name?',
+                    hint: 'What\'s your name?',
                     height: 45.0,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      _username = value;
+                    },
                     inputAction: TextInputAction.done,
                   )),
               SizedBox(height: 30),
               Padding(
                   padding: EdgeInsets.only(left: 25, right: 25),
                   child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final error = _checkInputs();
+                        if (error.isNotEmpty) {
+                          final snackBar = SnackBar(
+                              backgroundColor: Colors.redAccent,
+                              content: Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(error,
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold))));
+
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else {
+                          await _connectSession();
+                        }
+                      },
                       child: Container(
                           height: 45,
                           alignment: Alignment.center,
@@ -65,6 +114,11 @@ class _OnboardingState extends State<Onboarding> {
                           elevation: 5,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(45))))),
+              Spacer(),
+              BlocBuilder<OnboardingCubit, OnboardingState>(
+                  builder: (context, state) => state is Loading
+                      ? Center(child: CircularProgressIndicator())
+                      : Container()),
               Spacer(flex: 2)
 
               // CustomTextField()
