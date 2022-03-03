@@ -34,6 +34,12 @@ class UserService implements IUserService {
   }
 
   @override
+  Future<User> fetch(String id) async {
+    final user = await rethinkdb.table('users').get(id).run(connection);
+    return User.fromJson(user);
+  }
+
+  @override
   Future<List<User>> getOnlineUsers() async {
     Cursor users = await rethinkdb
         .table('users')

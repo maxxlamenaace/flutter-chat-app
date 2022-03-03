@@ -1,5 +1,4 @@
 import 'package:chat/src/services/encryption/encryption_service.dart';
-import 'package:chat/src/services/encryption/encryption_service_impl.dart';
 import 'package:rethink_db_ns/rethink_db_ns.dart';
 import 'dart:async';
 
@@ -10,13 +9,15 @@ import 'package:chat/src/services/message/message_service.dart';
 class MessageService implements IMessageService {
   final Connection _connection;
   final RethinkDb _rethinkdb;
-  final IEncryptionService _encryptionService;
+  final IEncryptionService? _encryptionService;
 
   final _controller = StreamController<Message>.broadcast();
 
   StreamSubscription? _changefeed;
 
-  MessageService(this._rethinkdb, this._connection, this._encryptionService);
+  MessageService(this._rethinkdb, this._connection,
+      {IEncryptionService? encryptionService})
+      : _encryptionService = encryptionService;
 
   @override
   dispose() {
@@ -33,7 +34,11 @@ class MessageService implements IMessageService {
   @override
   Future<bool> send(Message message) async {
     var data = message.toJson();
-    data['content'] = _encryptionService.encrypt(message.content);
+
+    if (_encryptionService != null) {
+      data['content'] = _encryptionService!.encrypt(message.content);
+    }
+
     Map record =
         await _rethinkdb.table('messages').insert(data).run(_connection);
 
@@ -65,7 +70,11 @@ class MessageService implements IMessageService {
 
   Message _getMessageFromFeed(feedData) {
     var data = feedData['new_val'];
-    data['content'] = _encryptionService.decrypt(data['content']);
+
+    if (_encryptionService != null) {
+      data['content'] = _encryptionService!.decrypt(data['content']);
+    }
+
     return Message.fromJson(data);
   }
 

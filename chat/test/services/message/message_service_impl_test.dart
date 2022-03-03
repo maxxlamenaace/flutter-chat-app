@@ -22,7 +22,8 @@ void main() {
         EncryptionService(Encrypter(AES(Key.fromLength(32))));
 
     await createDb(rethinkdb, connection);
-    messageService = MessageService(rethinkdb, connection, encryptionService);
+    messageService = MessageService(rethinkdb, connection,
+        encryptionService: encryptionService);
   });
 
   tearDown(() async {

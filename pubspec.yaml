@@ -36,10 +36,10 @@ dependencies:
   flutter_bloc: ^8.0.1
   google_fonts: ^2.3.1
   http: ^0.13.4
-  image_picker: ^0.8.4+10
   rethink_db_ns: ^0.0.4
   shared_preferences: ^2.0.13
   flutter_svg: ^0.22.0
+  intl: ^0.17.0
 
 
   # The following adds the Cupertino Icons font to your application.

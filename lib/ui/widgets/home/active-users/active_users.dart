@@ -1,6 +1,6 @@
 import 'package:chat/chat.dart';
-import 'package:chat_app/states-management/home/home_cubit.dart';
-import 'package:chat_app/states-management/home/home_state.dart';
+import 'package:chat_app/states-management/home/online-users/online_users_cubit.dart';
+import 'package:chat_app/states-management/home/online-users/online_users_state.dart';
 import 'package:chat_app/ui/widgets/home/avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,10 +29,10 @@ class _ActiveUsersState extends State<ActiveUsers> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(builder: (_, state) {
-      if (state is HomeLoading) {
+    return BlocBuilder<OnlineUsersCubit, OnlineUsersState>(builder: (_, state) {
+      if (state is OnlineUsersLoading) {
         return const Center(child: CircularProgressIndicator());
-      } else if (state is HomeSuccess) {
+      } else if (state is OnlineUsersSuccess) {
         return _buildList(state.onlineUsers);
       } else {
         return Container();

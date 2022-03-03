@@ -1,5 +1,8 @@
-import 'package:chat_app/states-management/home/home_cubit.dart';
-import 'package:chat_app/states-management/home/home_state.dart';
+import 'package:chat/chat.dart';
+import 'package:chat_app/states-management/home/chats/chats_cubit.dart';
+import 'package:chat_app/states-management/home/online-users/online_users_cubit.dart';
+import 'package:chat_app/states-management/home/online-users/online_users_state.dart';
+import 'package:chat_app/states-management/message/message_bloc.dart';
 import 'package:chat_app/ui/widgets/home/active-users/active_users.dart';
 import 'package:chat_app/ui/widgets/home/avatar.dart';
 import 'package:chat_app/ui/widgets/home/chats/chats.dart';
@@ -13,12 +16,26 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    context.read<HomeCubit>().getActiveUsers();
+    context.read<ChatsCubit>().getChats();
+    context.read<OnlineUsersCubit>().getActiveUsers();
+
+    final user = User.fromJson({
+      "id": "90e008e7-1f72-4d22-9d94-9d3149c6ad60",
+      "username": "Maxime",
+      "is_active": true,
+      "photo_url": "",
+      "last_seen": DateTime.now()
+    });
+
+    context.read<MessageBloc>().add(MessageEvent.onSubscribed(user));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +88,13 @@ class _HomeState extends State<Home> {
                                 borderRadius: BorderRadius.circular(50)),
                             child: Align(
                               alignment: Alignment.center,
-                              child: BlocBuilder<HomeCubit, HomeState>(
-                                  builder: (_, state) => state is HomeSuccess
+                              child: BlocBuilder<OnlineUsersCubit,
+                                      OnlineUsersState>(
+                                  builder: (_, state) => state
+                                          is OnlineUsersSuccess
                                       ? Text(
                                           'Active users (${state.onlineUsers.length})')
-                                      : Text('Active users (0)')),
+                                      : const Text('Active users (0)')),
                             )))
                   ])),
           body: TabBarView(children: [

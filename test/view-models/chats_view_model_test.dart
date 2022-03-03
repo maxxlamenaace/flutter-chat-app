@@ -9,13 +9,17 @@ import 'package:mockito/mockito.dart';
 
 class MockDataSource extends Mock implements IDataSource {}
 
+class MockUserService extends Mock implements IUserService {}
+
 void main() {
   ChatsViewModel chatsViewModel;
   MockDataSource mockDataSource;
+  MockUserService mockUserService;
 
   setUp(() {
     mockDataSource = MockDataSource();
-    chatsViewModel = ChatsViewModel(mockDataSource);
+    mockUserService = MockUserService();
+    chatsViewModel = ChatsViewModel(mockDataSource, mockUserService);
   });
 
   final message = Message.fromJson({
@@ -26,6 +30,9 @@ void main() {
     'id': '1'
   });
 
+  final user = User(
+      username: 'test', photoUrl: '', isActive: true, lastSeen: DateTime.now());
+
   test('initial chats return an empty list', () async {
     when(mockDataSource.findAllChats()).thenAnswer((_) async => []);
     expect(await chatsViewModel.getChats(), isEmpty);
@@ -33,6 +40,7 @@ void main() {
 
   test('returns list of chats', () async {
     when(mockDataSource.findAllChats()).thenAnswer((_) async => [Chat('123')]);
+    when(mockUserService.fetch(any)).thenAnswer((_) async => user);
     final chats = await chatsViewModel.getChats();
     expect(chats, isNotEmpty);
   });

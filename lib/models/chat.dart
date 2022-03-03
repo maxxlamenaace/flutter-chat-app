@@ -1,3 +1,4 @@
+import 'package:chat/chat.dart';
 import 'package:chat_app/models/local_message.dart';
 
 class Chat {
@@ -5,8 +6,9 @@ class Chat {
   int unread = 0;
   List<LocalMessage> messages = [];
   LocalMessage? mostRecent;
+  User? from;
 
-  Chat(this.id, {messages, mostRecent});
+  Chat(this.id, {messages, mostRecent, from});
 
   toMap() => {
         'id': id,
