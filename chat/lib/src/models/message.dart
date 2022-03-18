@@ -4,8 +4,8 @@ class Message {
   final DateTime timestamp;
   final String content;
 
-  String? _id;
-  String? get id => _id;
+  late String _id;
+  String get id => _id;
 
   Message(
       {required this.from,

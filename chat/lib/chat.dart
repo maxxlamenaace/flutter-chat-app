@@ -9,5 +9,6 @@ export 'package:chat/src/services/user/user_service_impl.dart';
 export 'package:chat/src/services/message/message_service.dart';
 export 'package:chat/src/services/message/message_service_impl.dart';
 export 'package:chat/src/services/receipt/receipt_service.dart';
+export 'package:chat/src/services/receipt/receipt_service_impl.dart';
 export 'package:chat/src/services/typing/typing_service.dart';
 export 'package:chat/src/services/typing/typing_service_impl.dart';

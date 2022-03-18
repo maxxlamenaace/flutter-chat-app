@@ -9,6 +9,8 @@ class ChatViewModel extends BaseViewModel {
   String _chatId = '';
   int otherMessages = 0;
 
+  String get chatId => _chatId;
+
   ChatViewModel(this._dataSource) : super(_dataSource);
 
   Future<List<LocalMessage>> getMessages(String chatId) async {
@@ -36,10 +38,18 @@ class ChatViewModel extends BaseViewModel {
     LocalMessage localMessage =
         LocalMessage(message.from, message, ReceiptStatus.DELIVERED);
 
+    if (_chatId.isEmpty) {
+      _chatId = localMessage.chatId;
+    }
+
     if (localMessage.chatId != _chatId) {
       otherMessages++;
     }
 
     await super.addMessage(localMessage);
+  }
+
+  Future<void> updateMessageReceipt(Receipt receipt) async {
+    await _dataSource.updateMessageReceipt(receipt.messageId, receipt.status);
   }
 }

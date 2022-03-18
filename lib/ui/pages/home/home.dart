@@ -3,6 +3,8 @@ import 'package:chat_app/states-management/home/chats/chats_cubit.dart';
 import 'package:chat_app/states-management/home/online-users/online_users_cubit.dart';
 import 'package:chat_app/states-management/home/online-users/online_users_state.dart';
 import 'package:chat_app/states-management/message/message_bloc.dart';
+import 'package:chat_app/ui/pages/home/home_router.dart';
+import 'package:chat_app/ui/widgets/common/header_status.dart';
 import 'package:chat_app/ui/widgets/home/active-users/active_users.dart';
 import 'package:chat_app/ui/widgets/home/avatar.dart';
 import 'package:chat_app/ui/widgets/home/chats/chats.dart';
@@ -11,8 +13,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Home extends StatefulWidget {
   final User _activeUser;
+  final IHomeRouter router;
 
-  const Home(this._activeUser);
+  const Home(this._activeUser, this.router);
 
   @override
   State<Home> createState() => _HomeState();
@@ -49,34 +52,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-              title: Container(
-                  width: double.maxFinite,
-                  child: Row(
-                    children: [
-                      Avatar(
-                        imageUrl: _user.photoUrl,
-                        isOnline: true,
-                      ),
-                      Column(children: [
-                        Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: Text(_user.username,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption
-                                    ?.copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold))),
-                        Padding(
-                            padding: const EdgeInsets.only(left: 12),
-                            child: Text('online',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption
-                                    ?.copyWith(fontSize: 14)))
-                      ])
-                    ],
-                  )),
+              title: HeaderStatus(_user.username, _user.photoUrl, true),
               bottom: TabBar(
                   indicatorPadding: const EdgeInsets.only(top: 10, bottom: 10),
                   tabs: [
@@ -103,8 +79,8 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                             )))
                   ])),
           body: TabBarView(children: [
-            Container(child: Chats(_user)),
-            Container(child: ActiveUsers())
+            Container(child: Chats(_user, widget.router)),
+            Container(child: ActiveUsers(_user, widget.router))
           ]),
         ));
   }
