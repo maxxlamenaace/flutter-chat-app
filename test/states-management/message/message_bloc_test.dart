@@ -36,7 +36,7 @@ void main() {
   });
 
   test('should emit message sent state when message is sent', () {
-    when(messageServiceMock.send(message)).thenAnswer((_) async => true);
+    when(messageServiceMock.send(message)).thenAnswer((_) async => message);
     messageBloc.add(MessageEvent.onMessageSent(message));
     expectLater(messageBloc.stream, emits(MessageState.sent(message)));
   });

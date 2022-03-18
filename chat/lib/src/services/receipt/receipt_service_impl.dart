@@ -51,11 +51,19 @@ class ReceiptService implements IReceiptService {
               return;
             } else {
               final receipt = Receipt.fromJson(feedData['new_val']);
+              _removeDeliveredReceipt(receipt);
               _controller.sink.add(receipt);
             }
           }).catchError((error) {
             print(error);
           }).onError((error, stackTrace) => print(error));
         });
+  }
+
+  _removeDeliveredReceipt(Receipt receipt) {
+    _rethinkdb
+        .table('receipts')
+        .get(receipt.id)
+        .delete({'return_changes': false}).run(_connection);
   }
 }

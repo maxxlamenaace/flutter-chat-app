@@ -40,7 +40,7 @@ void main() {
   test(
       'should emit typing notification sent state when typing notification is sent',
       () {
-    when(typingServiceMock.send(typingEvent: typingEvent, to: user))
+    when(typingServiceMock.send(typingEvent: typingEvent))
         .thenAnswer((_) async => true);
     typingNotificationBloc
         .add(TypingNotificationEvent.onTypingNotificationSent(typingEvent));

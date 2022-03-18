@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CompositionRoot.configure();
-  runApp(const MyApp());
+  final firstPage = CompositionRoot.start();
+  runApp(MyApp(firstPage));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final Widget firstPage;
+
+  const MyApp(this.firstPage, {Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -19,6 +22,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: lightTheme(context),
         darkTheme: darkTheme(context),
-        home: CompositionRoot.composeHomeUI());
+        home: firstPage);
   }
 }

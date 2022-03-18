@@ -10,27 +10,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final User _activeUser;
+
+  const Home(this._activeUser);
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
+  late User _user;
+
   @override
   void initState() {
     super.initState();
+    _user = widget._activeUser;
+    _initialSetup();
+  }
+
+  _initialSetup() async {
+    final user = (!_user.isActive
+        ? await context.read<OnlineUsersCubit>().connect()
+        : _user);
+
     context.read<ChatsCubit>().getChats();
-    context.read<OnlineUsersCubit>().getActiveUsers();
-
-    final user = User.fromJson({
-      "id": "90e008e7-1f72-4d22-9d94-9d3149c6ad60",
-      "username": "Maxime",
-      "is_active": true,
-      "photo_url": "",
-      "last_seen": DateTime.now()
-    });
-
+    context.read<OnlineUsersCubit>().getActiveUsers(user);
     context.read<MessageBloc>().add(MessageEvent.onSubscribed(user));
   }
 
@@ -39,6 +43,8 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -47,15 +53,14 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                   width: double.maxFinite,
                   child: Row(
                     children: [
-                      const Avatar(
-                        imageUrl:
-                            "https://avatars.dicebear.com/api/human/sdlhf.svg",
+                      Avatar(
+                        imageUrl: _user.photoUrl,
                         isOnline: true,
                       ),
                       Column(children: [
                         Padding(
                             padding: const EdgeInsets.only(left: 8),
-                            child: Text('Jess',
+                            child: Text(_user.username,
                                 style: Theme.of(context)
                                     .textTheme
                                     .caption
@@ -98,7 +103,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                             )))
                   ])),
           body: TabBarView(children: [
-            Container(child: Chats()),
+            Container(child: Chats(_user)),
             Container(child: ActiveUsers())
           ]),
         ));

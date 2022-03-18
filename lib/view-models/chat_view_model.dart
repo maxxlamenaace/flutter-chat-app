@@ -4,7 +4,7 @@ import 'package:chat_app/models/local_message.dart';
 import 'package:chat_app/view-models/base_view_model.dart';
 
 class ChatViewModel extends BaseViewModel {
-  IDataSource _dataSource;
+  final IDataSource _dataSource;
 
   String _chatId = '';
   int otherMessages = 0;

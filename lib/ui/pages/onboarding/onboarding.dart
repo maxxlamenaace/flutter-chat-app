@@ -1,6 +1,7 @@
 import 'package:chat_app/services/avatar_service.dart';
 import 'package:chat_app/states-management/onboarding/onboarding_cubit.dart';
 import 'package:chat_app/states-management/onboarding/onboarding_state.dart';
+import 'package:chat_app/ui/pages/onboarding/onboarding_router.dart';
 import 'package:chat_app/ui/widgets/common/custom_text_field.dart';
 import 'package:chat_app/ui/widgets/onboarding/logo.dart';
 import 'package:chat_app/ui/widgets/onboarding/profile_avatar.dart';
@@ -9,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:chat_app/colors.dart';
 
 class Onboarding extends StatefulWidget {
-  const Onboarding({Key? key}) : super(key: key);
+  final IOnboardingRouter router;
+
+  Onboarding(this.router);
 
   @override
   _OnboardingState createState() => _OnboardingState();
@@ -115,10 +118,15 @@ class _OnboardingState extends State<Onboarding> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(45))))),
               Spacer(),
-              BlocBuilder<OnboardingCubit, OnboardingState>(
+              BlocConsumer<OnboardingCubit, OnboardingState>(
                   builder: (context, state) => state is Loading
                       ? Center(child: CircularProgressIndicator())
-                      : Container()),
+                      : Container(),
+                  listener: (_, state) {
+                    if (state is OnboardingSuccess) {
+                      widget.router.onSessionSuccess(context, state.user);
+                    }
+                  }),
               Spacer(flex: 2)
 
               // CustomTextField()

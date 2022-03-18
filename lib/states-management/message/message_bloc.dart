@@ -31,8 +31,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
 
   void _onMessageSentEvent(
       MessageSent event, Emitter<MessageState> emit) async {
-    await _messageService.send(event.message);
-    emit(MessageState.sent(event.message));
+    final message = await _messageService.send(event.message);
+    emit(MessageState.sent(message));
   }
 
   @override

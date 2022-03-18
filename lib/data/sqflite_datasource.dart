@@ -1,5 +1,5 @@
+import 'package:chat/chat.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 import 'package:chat_app/data/datasource.dart';
 import 'package:chat_app/models/local_message.dart';
@@ -12,14 +12,18 @@ class SQFLiteDataSource implements IDataSource {
 
   @override
   Future<void> addChat(Chat chat) async {
-    await _database.insert('chats', chat.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await _database.transaction((txn) async {
+      await txn.insert('chats', chat.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.rollback);
+    });
   }
 
   @override
   Future<void> addMessage(LocalMessage localMessage) async {
-    await _database.insert('messages', localMessage.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await _database.transaction((txn) async {
+      await txn.insert('messages', localMessage.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    });
   }
 
   @override
@@ -116,5 +120,16 @@ class SQFLiteDataSource implements IDataSource {
         where: 'id = ?',
         whereArgs: [message.message.id],
         conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  @override
+  Future<void> updateMessageReceipt(
+      String messageId, ReceiptStatus receiptStatus) {
+    return _database.transaction(((txn) async {
+      await txn.update('messages', {'receipt': receiptStatus.value()},
+          where: 'id = ?',
+          whereArgs: [messageId],
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }));
   }
 }

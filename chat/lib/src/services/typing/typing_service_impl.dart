@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chat/chat.dart';
 import 'package:chat/src/models/user.dart';
 import 'package:chat/src/models/typing_event.dart';
 import 'package:chat/src/services/typing/typing_service.dart';
@@ -12,8 +13,9 @@ class TypingService implements ITypingService {
   final _controller = StreamController<TypingEvent>.broadcast();
 
   StreamSubscription? _changeFeed;
+  IUserService _userService;
 
-  TypingService(this._rethinkdb, this._connection);
+  TypingService(this._rethinkdb, this._connection, this._userService);
 
   @override
   void dispose() {
@@ -22,8 +24,9 @@ class TypingService implements ITypingService {
   }
 
   @override
-  Future<bool> send({required TypingEvent typingEvent, User? to}) async {
-    if (to == null || !to.isActive) {
+  Future<bool> send({required TypingEvent typingEvent}) async {
+    final receiver = await _userService.fetch(typingEvent.to);
+    if (receiver == null || !receiver.isActive) {
       return false;
     } else {
       Map record = await _rethinkdb.table("typing_events").insert(

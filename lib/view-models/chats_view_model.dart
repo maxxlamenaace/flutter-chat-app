@@ -5,8 +5,8 @@ import 'package:chat_app/view-models/base_view_model.dart';
 import 'package:chat_app/models/local_message.dart';
 
 class ChatsViewModel extends BaseViewModel {
-  IDataSource _dataSource;
-  IUserService _userService;
+  final IDataSource _dataSource;
+  final IUserService _userService;
 
   ChatsViewModel(this._dataSource, this._userService) : super(_dataSource);
 
@@ -24,6 +24,6 @@ class ChatsViewModel extends BaseViewModel {
     LocalMessage localMessage =
         LocalMessage(message.from, message, ReceiptStatus.DELIVERED);
 
-    await addMessage(localMessage);
+    await super.addMessage(localMessage);
   }
 }
