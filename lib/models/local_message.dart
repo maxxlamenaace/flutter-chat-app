@@ -1,12 +1,12 @@
 import 'package:chat/chat.dart';
 
 class LocalMessage {
+  late String _id;
   String chatId;
-  String? _id;
   Message message;
   ReceiptStatus receipt;
 
-  String? get id => _id;
+  String get id => _id;
 
   LocalMessage(this.chatId, this.message, this.receipt);
 

@@ -1,11 +1,11 @@
 class User {
-  late String _id;
+  String? _id;
   String username;
   String photoUrl;
   bool isActive;
   DateTime lastSeen;
 
-  String get id => _id;
+  String get id => _id ?? '';
 
   User(
       {required this.username,
