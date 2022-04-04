@@ -1,16 +1,27 @@
-# chat_app
+# Chat application
 
-A new Flutter project.
+A Flutter chat app project inspired by WhatsApp with `realtime typing notifications` and `online user activity`.
 
-## Getting Started
+## What's the tech stack?
 
-This project is a starting point for a Flutter application.
+This project is made with `Dart` and `RethinkDB` executed on a `Docker` container for the backend part and `Flutter` for the application and the user interfaces.
 
-A few resources to get you started if this is your first Flutter project:
+## How to launch?
+### 1. Execute the database on Docker
+You will need to have Docker installed on your computer. For help on how to install Docker check the [official documentation](https://docs.docker.com/). Then pull the image and launch the container instance by doing the following:
+```
+docker pull rethinkdb
+docker run -d -p 8080:8080 --name containerName rethinkdb
+docker container start containerName
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### 2. Build the app
 
-For help getting started with Flutter, view our
+1. Clone the repository
+2. Download project dependencies executing `flutter pub get` and then launch the app on your editor (personally using VS Code)
+
+
+## More info about Flutter?
+For help getting started with Flutter, view the official
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
